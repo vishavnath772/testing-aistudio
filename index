@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1,user-scalable=no" />
+    <meta name="theme-color" content="#0e1621" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Quiz" />
+    <meta name="application-name" content="Quiz" />
+    <title>Quiz — Pinnacle MCQ</title>
+
+    <!-- LINKING EXTERNAL DATA FILES -->
+    <script src="gs-data.js"></script>
+    <script src="eng-data.js"></script>
+
+    <!-- PWA Manifest (inline) -->
+    <script>
+      (function () {
+        const manifest = {
+          name: "Pinnacle MCQ Quiz",
+          short_name: "Quiz",
+          description: "SSC MCQ Practice — GS, History, Geography & more",
+          start_url: ".",
+          display: "standalone",
+          background_color: "#0e1621",
+          theme_color: "#0e1621",
+          orientation: "portrait",
+          icons: [
+            {
+              src: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIiB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiI+CiAgPHJlY3Qgd2lkdGg9IjE5MiIgaGVpZ2h0PSIxOTIiIHJ4PSIzOCIgZmlsbD0iIzBlMTYyMSIvPgogIDxyYWRpYWxHcmFkaWVudCBpZD0iZ2xvdyIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNTAlIj4KICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMyYjlmZWEiIHN0b3Atb3BhY2l0eT0iMC4yNSIvPgogICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMGUxNjIxIiBzdG9wLW9wYWNpdHk9IjAiLz4KICA8L3JhZGlhbEdyYWRpZW50PgogIDxjaXJjbGUgY3g9Ijk2IiBjeT0iOTYiIHI9IjkwIiBmaWxsPSJ1cmwoI2dsb3cpIi8+CiAgPGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iNzIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSIxMCIvPgogIDxjaXJjbGUgY3g9Ijk2IiBjeT0iOTYiIHI9IjUyIiBmaWxsPSJub25lIiBzdHJva2U9IiMyYjlmZWEiIHN0cm9rZS13aWR0aD0iMTAiLz4KICA8Y2lyY2xlIGN4PSI5NiIgY3k9Ijk2IiByPSIzMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEwIi8+CiAgPGNpcmNsZSBjeD0iOTYiIGN5PSI5NiIgcj0iMTQiIGZpbGw9IiNmMGI0MjkiLz4KICA8Y2lyY2xlIGN4PSI5MCIgY3k9IjkwIiByPSI0IiBmaWxsPSIjZmZmIiBvcGFjaXR5PSIwLjUiLz4KPC9zdmc+",
+              sizes: "192x192",
+              type: "image/svg+xml",
+              purpose: "any maskable",
+            }
+          ],
+        };
+        const blob = new Blob([JSON.stringify(manifest)], { type: "application/manifest+json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("link");
+        link.rel = "manifest";
+        link.href = url;
+        document.currentScript.parentNode.appendChild(link);
+      })();
+    </script>
+
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+      :root {
+        --bg: #0e1621; --feed: #17212b; --card: #1e2c3a; --card2: #243340; --border: #2a3a4d;
+        --blue: #2b9fea; --blue2: #1a7fc4; --green: #3db85c; --green2: #2a8f44; --red: #e5534b;
+        --red2: #b83e37; --yellow: #f0b429; --text: #e8eaed; --sub: #7d96ad; --sub2: #5a7185;
+        --shadow: 0 2px 12px rgba(0, 0, 0, 0.45); --shadow2: 0 4px 20px rgba(0, 0, 0, 0.6);
+      }
+      html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif; overflow-x: hidden; }
+
+      /* SPLASH */
+      #splash { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 14px; transition: opacity 0.4s; }
+      #splash.hide { opacity: 0; pointer-events: none; }
+      .sp-icon { font-size: 72px; animation: bounce 1.2s ease infinite; }
+      @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+      .sp-title { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, var(--blue), #60cfff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+      .sp-sub { font-size: 13px; color: var(--sub); }
+      .sp-bar { width: 180px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+      .sp-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #60cfff); animation: spload 2s ease forwards; }
+      @keyframes spload { 0% { width: 0; } 100% { width: 100%; } }
+
+      /* NAV BAR */
+      #nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(14, 22, 33, 0.96); backdrop-filter: blur(12px); border-top: 1px solid var(--border); display: flex; z-index: 200; padding: 6px 0 max(8px, env(safe-area-inset-bottom)); }
+      .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; padding: 4px 0; }
+      .nav-icon { font-size: 21px; transition: transform 0.2s; }
+      .nav-label { font-size: 10px; color: var(--sub); transition: color 0.2s; font-weight: 500; }
+      .nav-item.active .nav-label { color: var(--blue); font-weight: 700; }
+      .nav-item.active .nav-icon { transform: scale(1.15); }
+
+      /* SCREENS */
+      .screen { display: none; flex-direction: column; min-height: 100vh; padding-bottom: 70px; }
+      .screen.active { display: flex; }
+
+      /* HOME SCREEN */
+      .home-hero { background: linear-gradient(160deg, #0d2035 0%, #1a2d40 100%); padding: 28px 16px 22px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+      .home-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+      .home-brand-icon { font-size: 32px; }
+      .home-brand-text .ht1 { font-size: 18px; font-weight: 800; color: var(--blue); }
+      .home-brand-text .ht2 { font-size: 12px; color: var(--sub); margin-top: 1px; }
+      .home-day-card { background: rgba(43, 159, 234, 0.1); border: 1px solid rgba(43, 159, 234, 0.25); border-radius: 14px; padding: 14px; }
+      .hdc-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+      .start-btn { background: linear-gradient(135deg, var(--blue), var(--blue2)); color: #fff; border: none; border-radius: 10px; padding: 10px 22px; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 12px rgba(43, 159, 234, 0.4); transition: transform 0.15s; }
+      .day-prog-bar { height: 5px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
+      .day-prog-fill { height: 100%; background: linear-gradient(90deg, var(--blue), #60cfff); transition: width 0.5s ease; }
+      .day-prog-meta { display: flex; justify-content: space-between; margin-top: 5px; font-size: 11px; color: var(--sub); }
+
+      .home-body { padding: 14px 14px 4px; }
+      .sec-label { font-size: 11px; font-weight: 700; color: var(--sub2); text-transform: uppercase; letter-spacing: 0.8px; margin: 16px 0 8px; }
+      .topic-list { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+      .topic-card { background: var(--card); border-radius: 13px; padding: 13px 12px; border: 1px solid var(--border); cursor: pointer; transition: all 0.18s; position: relative; }
+      .topic-card:active { transform: scale(0.97); border-color: var(--blue); }
+      .tc-name { font-size: 12px; font-weight: 700; margin-bottom: 4px; }
+      .tc-acc { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 6px; }
+      .acc-good { background: #1a3326; color: var(--green); }
+      .acc-mid { background: #2a2600; color: var(--yellow); }
+      .acc-bad { background: #2d1a1a; color: var(--red); }
+      .acc-none { background: var(--card2); color: var(--sub); }
+
+      /* QUIZ FEED */
+      #quiz-screen { background: var(--feed); }
+      .quiz-header { position: sticky; top: 0; z-index: 150; background: rgba(14, 22, 33, 0.97); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); padding: 8px 14px 0; }
+      .qh-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+      .qh-return { color: var(--blue); font-weight: 700; cursor: pointer; padding: 8px 0; }
+      .qh-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px; }
+      .qhs { background: var(--card); border-radius: 8px; padding: 5px 4px; text-align: center; border: 1px solid var(--border); }
+      .qhs-num { font-size: 14px; font-weight: 700; }
+      .qhs-lbl { font-size: 9px; color: var(--sub); text-transform: uppercase; }
+      .qhs-g { color: var(--green); } .qhs-r { color: var(--red); } .qhs-b { color: var(--blue); } .qhs-y { color: var(--yellow); }
+
+      #feed { padding: 10px 12px 24px; display: flex; flex-direction: column; gap: 10px; }
+      .q-bubble { background: var(--card); border-radius: 18px; border: 1px solid var(--border); overflow: hidden; animation: bubbleIn 0.35s ease forwards; opacity: 0; }
+      @keyframes bubbleIn { to { opacity: 1; transform: translateY(0); } }
+      .qb-header { padding: 11px 14px 0; display: flex; justify-content: space-between; }
+      .qb-text { padding: 10px 14px 12px; font-size: 14.5px; line-height: 1.55; }
+      .qb-opts { padding: 0 12px 12px; display: flex; flex-direction: column; gap: 8px; }
+      .opt-btn { background: var(--card2); border: 1.5px solid var(--border); border-radius: 12px; padding: 11px 14px; text-align: left; color: var(--text); cursor: pointer; display: flex; gap: 11px; }
+      .opt-btn.correct { border-color: var(--green); background: rgba(61, 184, 92, 0.1); }
+      .opt-btn.wrong { border-color: var(--red); background: rgba(229, 83, 75, 0.1); }
+      .fact-box { margin: 0 12px 14px; background: #0d1e30; border-radius: 13px; padding: 13px; display: none; }
+      .fact-box.show { display: block; }
+
+      /* STATS */
+      .stats-header { padding: 18px 16px; background: var(--card); border-bottom: 1px solid var(--border); }
+      .sh-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+      .sh-cell { background: var(--bg); border-radius: 11px; padding: 10px; text-align: center; border: 1px solid var(--border); }
+      .sh-num { font-size: 18px; font-weight: 800; }
+      .sh-lbl { font-size: 9px; color: var(--sub); text-transform: uppercase; }
+
+      /* SUB PANEL */
+      .sub-panel { display: none; background: var(--bg); border: 1px solid var(--border); padding: 10px; gap: 6px; flex-direction: column; }
+      .sub-panel.open { display: flex; }
+      .sub-btn { background: var(--card2); padding: 10px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+
+    <!-- SPLASH -->
+    <div id="splash">
+      <div class="sp-icon">🎯</div>
+      <div class="sp-title">Pinnacle GS Quiz</div>
+      <div class="sp-sub">SSC · CHSL · MTS · CGL</div>
+      <div class="sp-bar"><div class="sp-fill"></div></div>
+    </div>
+
+    <!-- HOME SCREEN -->
+    <div id="home-screen" class="screen">
+      <div class="home-hero">
+        <div class="home-brand">
+          <div class="home-brand-icon">📚</div>
+          <div class="home-brand-text">
+            <div class="ht1">Pinnacle GS Quiz</div>
+            <div class="ht2">Practice MCQs from External Data</div>
+          </div>
+        </div>
+        <div class="home-day-card">
+          <div class="hdc-row">
+            <div>
+              <div style="font-weight:700">Today's Practice 🔥</div>
+              <div id="today-text" style="font-size:12px;color:var(--sub)">0 questions done</div>
+            </div>
+            <button class="start-btn" onclick="startQuiz('random')">Start ▶</button>
+          </div>
+          <div class="day-prog-bar"><div class="day-prog-fill" id="day-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="home-body">
+        <div class="sec-label">📂 Practice by Topic</div>
+        <div class="topic-grid" id="topic-grid"></div>
+      </div>
+    </div>
+
+    <!-- ENGLISH SCREEN -->
+    <div id="eng-screen" class="screen">
+      <div class="home-hero">
+        <div class="home-brand">
+          <div class="home-brand-icon">📝</div>
+          <div class="home-brand-text">
+            <div class="ht1">English Quiz</div>
+            <div class="ht2">Vocabulary & Grammar</div>
+          </div>
+        </div>
+        <button class="start-btn" style="width:100%" onclick="startQuiz('random','eng')">Start English Practice ▶</button>
+      </div>
+      <div class="home-body">
+        <div class="topic-grid" id="eng-topic-grid"></div>
+      </div>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen" class="screen">
+      <div class="quiz-header">
+        <div class="qh-top">
+          <div class="qh-return" onclick="exitQuiz()">‹ Return</div>
+          <div id="qh-topic" style="font-size:13px;font-weight:700;flex:1;text-align:center"></div>
+        </div>
+        <div class="qh-stats">
+          <div class="qhs"><div class="qhs-num qhs-g" id="qs-correct">0</div><div class="qhs-lbl">Correct</div></div>
+          <div class="qhs"><div class="qhs-num qhs-r" id="qs-wrong">0</div><div class="qhs-lbl">Wrong</div></div>
+          <div class="qhs"><div class="qhs-num qhs-b" id="qs-acc">0%</div><div class="qhs-lbl">Accuracy</div></div>
+          <div class="qhs"><div class="qhs-num qhs-y" id="qs-timer">0s</div><div class="qhs-lbl">Time</div></div>
+        </div>
+      </div>
+      <div id="feed"></div>
+    </div>
+
+    <!-- STATS SCREEN -->
+    <div id="stats-screen" class="screen">
+      <div class="stats-header">
+        <div style="font-weight:800;margin-bottom:15px">📊 Your Progress</div>
+        <div class="sh-grid">
+          <div class="sh-cell"><div class="sh-num qhs-b" id="st-total">0</div><div class="sh-lbl">Total</div></div>
+          <div class="sh-cell"><div class="sh-num qhs-g" id="st-correct">0</div><div class="sh-lbl">Correct</div></div>
+          <div class="sh-cell"><div class="sh-num qhs-r" id="st-wrong">0</div><div class="sh-lbl">Wrong</div></div>
+          <div class="sh-cell"><div class="sh-num qhs-y" id="st-streak">0</div><div class="sh-lbl">Streak</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAV BAR -->
+    <div id="nav-bar">
+      <div class="nav-item active" id="nav-home" onclick="switchTab('home')">
+        <div class="nav-icon">📚</div><div class="nav-label">GS</div>
+      </div>
+      <div class="nav-item" id="nav-eng" onclick="switchTab('eng')">
+        <div class="nav-icon">📝</div><div class="nav-label">English</div>
+      </div>
+      <div class="nav-item" id="nav-stats" onclick="switchTab('stats')">
+        <div class="nav-icon">📊</div><div class="nav-label">Stats</div>
+      </div>
+    </div>
+
+    <script>
+      // STATE
+      let G = JSON.parse(localStorage.getItem('pg_state')) || {
+        totalDone: 0, totalCorrect: 0, todayDone: 0, topicStats: {}
+      };
+
+      let S = { queue: [], idx: 0, correct: 0, wrong: 0, dataset: 'gs' };
+
+      function saveG() { localStorage.setItem('pg_state', JSON.stringify(G)); }
+
+      function startQuiz(mode, dataset = 'gs') {
+        const pool = dataset === 'eng' ? ALL_ENG_MCQ : ALL_MCQ;
+        S = { 
+          queue: [...pool].sort(() => 0.5 - Math.random()).slice(0, 20),
+          idx: 0, correct: 0, wrong: 0, dataset: dataset
+        };
+        document.getElementById('feed').innerHTML = '';
+        switchTab('quiz');
+        renderNext();
+      }
+
+      function renderNext() {
+        if (S.idx >= S.queue.length) {
+          document.getElementById('feed').innerHTML += `<div style="text-align:center;padding:20px">🎉 Session Complete!</div>`;
+          return;
+        }
+        const q = S.queue[S.idx];
+        const div = document.createElement('div');
+        div.className = 'q-bubble';
+        div.innerHTML = `
+          <div class="qb-header"><span style="font-size:10px;color:var(--sub)">Q${S.idx+1}</span></div>
+          <div class="qb-text">${q.q}</div>
+          <div class="qb-opts">
+            ${['a','b','c','d'].map(opt => `
+              <button class="opt-btn" onclick="checkAns(this, '${opt}', '${q.ans}', '${S.idx}')">
+                <span style="opacity:0.5;margin-right:10px">${opt.toUpperCase()}</span> ${q[opt]}
+              </button>
+            `).join('')}
+          </div>
+          <div class="fact-box" id="fact-${S.idx}">${q.fact || ''}</div>
+        `;
+        document.getElementById('feed').appendChild(div);
+        div.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      function checkAns(btn, chosen, correct, idx) {
+        const parent = btn.parentElement;
+        const buttons = parent.querySelectorAll('button');
+        buttons.forEach(b => b.disabled = true);
+
+        if (chosen === correct) {
+          btn.classList.add('correct');
+          S.correct++;
+          G.totalCorrect++;
+        } else {
+          btn.classList.add('wrong');
+          S.wrong++;
+          buttons.forEach(b => {
+             // highlight correct one
+             if (b.innerText.toLowerCase().startsWith(correct)) b.classList.add('correct');
+          });
+        }
+        
+        G.totalDone++;
+        G.todayDone++;
+        document.getElementById(`fact-${idx}`).style.display = 'block';
+        updateStats();
+        saveG();
+        
+        setTimeout(() => {
+          S.idx++;
+          renderNext();
+        }, 1500);
+      }
+
+      function updateStats() {
+        document.getElementById('qs-correct').textContent = S.correct;
+        document.getElementById('qs-wrong').textContent = S.wrong;
+        document.getElementById('st-total').textContent = G.totalDone;
+        document.getElementById('st-correct').textContent = G.totalCorrect;
+      }
+
+      function switchTab(tab) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(tab + '-screen').classList.add('active');
+        document.getElementById('nav-' + tab).classList.add('active');
+        if(tab === 'home') renderTopicGrid();
+        if(tab === 'eng') renderEngGrid();
+      }
+
+      function exitQuiz() { if(confirm("Exit Quiz?")) switchTab('home'); }
+
+      function renderTopicGrid() {
+        const topics = [...new Set(ALL_MCQ.map(q => q.topic))];
+        document.getElementById('topic-grid').innerHTML = topics.map(t => `
+          <div class="topic-card" onclick="startQuiz('topic')">
+            <div class="tc-name">${t}</div>
+            <div class="tc-acc acc-none">Start</div>
+          </div>
+        `).join('');
+      }
+
+      function renderEngGrid() {
+        const topics = [...new Set(ALL_ENG_MCQ.map(q => q.topic))];
+        document.getElementById('eng-topic-grid').innerHTML = topics.map(t => `
+          <div class="topic-card" onclick="startQuiz('topic', 'eng')">
+            <div class="tc-name">${t}</div>
+            <div class="tc-acc acc-none">Start</div>
+          </div>
+        `).join('');
+      }
+
+      // Init
+      setTimeout(() => {
+        document.getElementById('splash').classList.add('hide');
+        switchTab('home');
+      }, 2000);
+    </script>
+  </body>
+</html>
