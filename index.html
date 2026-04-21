@@ -1720,6 +1720,18 @@ const _elapsed = Date.now() - _splashStart;
 const _wait = Math.max(0, _splashMinMs - _elapsed);
 setTimeout(_dismissSplash, _wait);
 
+// --- ADD THESE LINES HERE ---
+window.startQuiz = startQuiz;
+window.switchTab = switchTab;
+window.exitQuiz = exitQuiz;
+window.toggleSubPanel = toggleSubPanel;
+window.handleAnswer = handleAnswer;
+window.showQuickMenu = showQuickMenu;
+window.hideQuickMenu = hideQuickMenu;
+window.exportBackup = exportBackup;
+window.importBackup = importBackup;
+// ----------------------------
+
 } // end initApp()
 </script>
 <!-- Quick Menu Modal -->
